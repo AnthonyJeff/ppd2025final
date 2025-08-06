@@ -1,0 +1,22 @@
+{    
+    "Rodrigo": {
+        "lat": null,
+        "lng": null
+    },    
+    "Anthony Jefferson": {
+        "lat": -3.45,
+        "lng": -3.28
+    },
+    "Dayane Chagas": {
+        "lat": -3.21,
+        "lng": -3.78
+    },
+    "Helano": {
+        "lat": -5.89,
+        "lng": -6.13
+    },
+    "Lucas Mesquita": {
+        "lat": 5.21,
+        "lng": 6.33
+    }
+}

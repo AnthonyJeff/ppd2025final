@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sistema de Geolocalização - RabbitMQ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; background: #eef; padding: 20px; }
+    .section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+    input { margin: 5px 0; padding: 5px; width: 100%; max-width: 300px; }
+    button { padding: 6px 12px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Sistema de Geolocalização com RabbitMQ</h1>
+
+  <div class="section">
+    <h2>Enviar Localização</h2>
+    <input type="text" id="device" placeholder="Nome do Dispositivo" />
+    <input type="text" id="latitude" placeholder="Latitude" />
+    <input type="text" id="longitude" placeholder="Longitude" />
+    <br />
+    <button onclick="enviarLocalizacao()">Enviar</button>
+  </div>
+
+  <div class="section">
+    <h2>Localizações Atuais</h2>
+    <div id="map-output"></div>
+  </div>
+
+  <script src="client.js"></script>
+</body>
+</html>
