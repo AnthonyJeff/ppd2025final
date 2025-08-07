@@ -1,22 +1,20 @@
-{    
-    "Rodrigo": {
-        "lat": null,
-        "lng": null
-    },    
-    "Anthony Jefferson": {
-        "lat": -3.45,
-        "lng": -3.28
+{
+    "Anthony": {
+        "lat": -9.33,
+        "lng": -9.42,
+        "online": true,
+        "last_seen": 1754585303
     },
-    "Dayane Chagas": {
-        "lat": -3.21,
-        "lng": -3.78
+    "Dayane": {
+        "lat": -9.33,
+        "lng": -9.42,
+        "online": true,
+        "last_seen": 1754585420
     },
     "Helano": {
-        "lat": -5.89,
-        "lng": -6.13
-    },
-    "Lucas Mesquita": {
-        "lat": 5.21,
-        "lng": 6.33
+        "lat": -11.2,
+        "lng": -6.21,
+        "online": true,
+        "last_seen": 1754585313
     }
 }

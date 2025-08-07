@@ -98,6 +98,42 @@ function sendToUser($params) {
   }
 }
 
+function sendToUserWithRaio($params) {
+  global $channel;
+
+  $from = $params["from"];
+  $to = $params["to"];
+  $msg = $params["message"];
+
+  $users = file_exists("users.json") ? json_decode(file_get_contents("users.json"), true) : [];
+  if (!isset($users[$from]) || !isset($users[$to])) {
+    return "Remetente ou destinatário inválido.";
+  }
+
+  $lat1 = $users[$from]["lat"];
+  $lng1 = $users[$from]["lng"];
+  $lat2 = $users[$to]["lat"];
+  $lng2 = $users[$to]["lng"];
+  $dist = calcularDistancia($lat1, $lng1, $lat2, $lng2);
+
+  $online = ($users[$to]["online"] ?? false) && (time() - ($users[$to]["last_seen"] ?? 0) < 15);
+
+  $fullMessage = "[De $from]: $msg";
+
+  if ($online && $dist <= floatval($params["raio"] ?? 999999)) {
+    // síncrona → salva no arquivo do destinatário
+    file_put_contents("sync-$to.txt", $fullMessage . PHP_EOL, FILE_APPEND);
+    return "Mensagem entregue sincronamente.";
+  } else {
+    // assíncrona → vai para fila RabbitMQ
+    $queue = ensureUserQueue($to);
+    $amqpMsg = new AMQPMessage($fullMessage);
+    $channel->basic_publish($amqpMsg, "", $queue);
+    return "Usuário offline ou fora do raio. Mensagem enviada para a fila.";
+  }
+}
+
+
 function readQueue($params) {
   global $channel;
   $user = $params["user"];

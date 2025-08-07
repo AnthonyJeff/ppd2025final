@@ -16,6 +16,9 @@
   <div class="container mt-4">
     <div class="row">
       <div class="col-3">
+
+        <div id="welcome-user" class="mb-2 fw-bold text-primary"></div>
+
         <div class="card" style="width: 18rem;">
           <div class="card-header">📝Lista de Contatos</div>
           <ul class="list-group list-group-flush" id="contact-list"></ul>
@@ -78,19 +81,34 @@
         startSync();
         atualizarContatos();
         alert("Login efetuado.");
+
+        //user = name;
+        //localStorage.setItem("user", user);
+        exibirBoasVindas();
     }
     async function logout() {
         await rpc("logoutUser", { name: user });
         localStorage.removeItem("user");
         user = "";
         alert("Você saiu.");
+        exibirBoasVindas(); // esconde a saudação
     }
+    
     async function sendMessage() {
         const to = document.getElementById("to").value;
         const message = document.getElementById("message").value;
         const result = await rpc("sendToUser", { from: user, to, message });
         alert(result);
     }
+
+    // async function sendMessage() {
+    //   const to = document.getElementById("to").value;
+    //   const message = document.getElementById("message").value;
+    //   const raio = parseFloat(document.getElementById("raio").value);
+    //   const result = await rpc("sendToUser", { from: user, to, message, raio });
+    //   alert(result);
+    // }
+
     async function readMessages() {
         const messages = await rpc("readQueue", { user, consume: false });
         document.getElementById("inbox").value = messages.join("\n");
@@ -127,16 +145,29 @@
     ul.innerHTML = "";
 
     contatos.forEach(c => {
-    const li = document.createElement("li");
-    li.className = "list-group-item" + (c.dentro_raio ? "" : " text-muted");
-    li.innerHTML = `${c.online ? "🟢" : "🔴"} <strong>${c.name}</strong><br> 📍 ${c.lat}, ${c.lng} - 📏 ${c.distancia} km ${c.dentro_raio ? "" : "🚫"}`;
-    ul.appendChild(li);
+      const li = document.createElement("li");
+      li.className = "list-group-item" + (c.dentro_raio ? "" : " text-muted");
+      li.innerHTML = `${c.online ? "🟢" : "🔴"} <strong>${c.name}</strong><br> 📍 ${c.lat}, ${c.lng} - 📏 ${c.distancia} km ${c.dentro_raio ? "" : "🚫"}`;
+      ul.appendChild(li);
     });
   }
 
+  function exibirBoasVindas() {
+    const div = document.getElementById("welcome-user");
+    if (user) {
+      div.innerHTML = `👋 Bem-vindo, <strong>${user}</strong>!`;
+    } else {
+      div.innerHTML = "";
+    }
+  }
 
     // Restaurar login se usuário já estiver no localStorage 
-    if (user) { rpc("loginUser", { name: user }); startSync(); atualizarContatos(); } 
+    if (user) { 
+      rpc("loginUser", { name: user }); 
+      startSync(); 
+      atualizarContatos(); 
+      exibirBoasVindas();
+    } 
     
     // Logout automático ao fechar/recarregar 
     window.addEventListener("beforeunload", function () { if (user) { navigator.sendBeacon(API, JSON.stringify({ jsonrpc: "2.0", method: "logoutUser", params: { name: user }, id: Date.now() })); } }); 
